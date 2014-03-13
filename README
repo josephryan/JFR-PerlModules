@@ -1,0 +1,77 @@
+JFR-PerlModules
+======
+
+Perl extensions for dealing with molecular sequence data
+
+MODULES
+------------
+
+JFR::Fasta - module to parse FASTA-formatted files
+JFR::Fastq - module to parse FASTQ-formatted files
+JFR::FormatSeq - module to format the printing of sequences
+JFR::GFF3 - module to parse GFF3-formatted files
+JFR::Translate - module to translate DNA and RNA sequences
+
+INSTALLATION
+------------
+
+To install these modules type the following:
+
+   perl Makefile.PL
+   make
+   make test
+   make install
+
+HELP
+------------
+
+Detailed documentation is embedded in each module in the form of pod (plain old documentation). It can be viewed by using the perldoc program
+
+    perldoc JFR::Fasta
+    perldoc JFR::Fastq
+    perldoc JFR::FormatSeq
+    perldoc JFR::GFF3
+    perldoc JFR::Translate
+
+SYNOPSIS
+------------
+
+    use JFR::Fasta;
+    my $fp = JFR::Fasta->new($fasta_file);
+    while (my $rec = $fp->get_record()) {
+        print "$rec->{'def'}\n";
+        print "$rec->{'seq'}\n";
+        my $id = JFR::Fasta->get_def_w_o_gt($rec->{'def'});
+    }
+
+    use JFR::Fastq;
+    my $fq = JFR::Fastq->new($fastq_file);
+    while (my $rec = $fp->get_record()) {
+        print "$rec->{'def'}\n";
+        print "$rec->{'rest'}\n";
+        # or
+        $fp->print_record();
+    }
+
+see embedded perldoc documenation for more examples
+
+COPYRIGHT AND LICENCE
+------------
+
+Copyright (C) 2014 by Joseph Ryan
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program in the file LICENSE.  If not, see
+http://www.gnu.org/licenses/.
+
+

@@ -1,0 +1,6 @@
+Makefile.PL
+LICENSE
+MANIFEST
+README
+t/JFR-Fasta.t
+lib/JFR/Fasta.pm
