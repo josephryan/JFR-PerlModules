@@ -46,11 +46,11 @@ SYNOPSIS
 
     use JFR::Fastq;
     my $fq = JFR::Fastq->new($fastq_file);
-    while (my $rec = $fp->get_record()) {
+    while (my $rec = $fq->get_record()) {
         print "$rec->{'def'}\n";
         print "$rec->{'rest'}\n";
         # or
-        $fp->print_record();
+        $fq->print_record();
     }
 
 see embedded perldoc documenation for more examples
