@@ -1,10 +1,15 @@
 package JFR::Fastq;
 
+# FASTQ SPEC SAYS BLOCK SHOULD BE: @<seqname>\n<seq>\n+[<seqname>]\n<qual>
+
 use strict;
 use FileHandle;
+use IO::Uncompress::Gunzip qw($GunzipError);
+use IO::Uncompress::Bunzip2 qw($Bunzip2Error);
+use IO::Uncompress::Unzip qw($UnzipError);
 
 $JFR::Fastq::AUTHOR  = 'Joseph Ryan';
-$JFR::Fastq::VERSION = '0.01';
+$JFR::Fastq::VERSION = '0.05';
 
 sub get_record{
     my $self = shift;
@@ -13,28 +18,40 @@ sub get_record{
     return '' if (! $self->{'filehandle'} );
 
     my %h;
-    my $seq  = '';
-    my $line = '';
+    my $seq   = '';
+    my $qual  = '';
+    my $line  = '';
 
     my $fh = $ { $self->{'filehandle'} };
 
     while( $line = $fh->getline() ) {
-	if ($line =~ m/^(\@.+)/) {
+	if ($line =~ m/^(\@.+)/ && $self->{'stored_pos'} != 3) {
+	    $self->{'stored_pos'} = 1;
 	    chomp $line;
             if ($seq) {
 		$h{'def'}  = $self->{'stored_def'};
-                $h{'rest'} = $seq;
+                $h{'seq'} = $seq;
+                $h{'qual'} = $qual;
                 $self->{'rec'} = \%h;
                 $self->{'stored_def'} = $1;   
                 return \%h;
 	    }
 	    $self->{'stored_def'} = $1;   
-	}   else {
+	} elsif ($self->{'stored_pos'} == 1) {
+            $self->{'stored_pos'} = 2;
+	    chomp $line;
             $seq .= $line;
+        } elsif ($self->{'stored_pos'} == 2) {
+            $self->{'stored_pos'} = 3;
+        } elsif ($self->{'stored_pos'} == 3) {
+            $self->{'stored_pos'} = 0;
+	    chomp $line;
+            $qual = $line;
         }
     }
     $h{'def'}  = $self->{'stored_def'};
-    $h{'rest'} = $seq;
+    $h{'seq'} = $seq;
+    $h{'qual'} = $qual;
     undef $self->{'filehandle'};
     $self->{'rec'} = \%h;
     return \%h;
@@ -42,17 +59,30 @@ sub get_record{
 
 sub print_record {
     my $self = shift;
-    die "unexpected" unless ($self->{'rec'}->{'def'} && $self->{'rec'}->{'rest'});
-    print "$self->{'rec'}->{'def'}\n$self->{'rec'}->{'rest'}";
+    print "$self->{'rec'}->{'def'}\n$$self->{'rec'}->{'seq'}\n+\n$self->{'rec'}->{'qual'}";
 }
 
 sub new {
     my $invocant = shift;
     my $file     = shift;
-    my $fh = FileHandle->new($file,'r');
-    die "cannot open $file: $!\n" unless(defined $fh);
+    my $fh = '';
+
+
+    if ($file =~ m/\.gz$/i) {
+        $fh = IO::Uncompress::Gunzip->new($file)
+            or die "IO::Uncompress::Gunzip of $file failed: $GunzipError\n";
+    } elsif ($file =~ m/\.bz2$/i) {
+        $fh = IO::Uncompress::Bunzip2->new($file)
+            or die "IO::Uncompress::Bunzip2 of $file failed: $Bunzip2Error\n";
+    } elsif ($file =~ m/\.zip$/i) {
+        $fh = IO::Uncompress::Unzip->new($file)
+            or die "IO::Uncompress::Unzip of $file failed: $UnzipError\n";
+    } else {
+        $fh = FileHandle->new($file,'r');
+        die "cannot open $file: $!\n" unless(defined $fh);
+    }
     my $class = ref($invocant) || $invocant;
-    my $self = { 'filehandle'  => \$fh, 'stored_def' => '' };
+    my $self = { 'filehandle'  => \$fh, 'stored_pos' => 0, 'stored_def' => '' };
     return bless $self, $class;
 }
 
@@ -72,7 +102,9 @@ JFR::Fastq - Perl extension for parsing FASTQ files.
 
   while (my $rec = $fp->get_record()) {
       print "$rec->{'def'}\n";
-      print "$rec->{'rest'}\n";
+      print "$rec->{'seq'}\n";
+      print "+\n";
+      print "$rec->{'qual'}\n";
       # or
       $fp->print_record();
   }
@@ -83,7 +115,8 @@ For each record in a FASTQ file this module returns a hash that has the
 defline and the sequence.
 
     $h->{'def'};
-    $h->{'rest'};
+    $h->{'qual'};
+    $h->{'seq'};
 
 =head1 AUTHOR
 
