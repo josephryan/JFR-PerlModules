@@ -21,6 +21,13 @@ To install these modules type the following:
    make
    make test
    make install
+   
+To install without root privelages try:
+
+   perl Makefile.PL PREFIX=/home/myuser/scripts
+   make
+   make test
+   make install
 
 HELP
 ------------
