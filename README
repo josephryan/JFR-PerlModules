@@ -29,6 +29,13 @@ To install without root privelages try:
    make test
    make install
 
+   # NOTE: A user reported receiving this message: "Only one of PREFIX or INSTALL_BASE can be given. Not both"
+   # The fix was: perl Makefile.PL INSTALL_BASE=/home/myuser/scripts
+   
+   # to use these modules on non-root installations add to top of script(s):
+   # use lib qw(/home/myuser/scripts/perl5); 
+   # this should be the directory that contains the JFR directory after 'make install'
+
 HELP
 ------------
 
