@@ -12,10 +12,15 @@ JFR::FormatSeq - module to format the printing of sequences
 JFR::GFF3 - module to parse GFF3-formatted files
 JFR::Translate - module to translate DNA and RNA sequences
 
+SCRIPTS
+-------
+
+See scripts directory for examples using modules. Scripts are installed automaticaly if using standard install outlined below.
+
 INSTALLATION
 ------------
 
-To install these modules type the following:
+To install these modules and scripts type the following:
 
    perl Makefile.PL
    make
@@ -39,13 +44,14 @@ To install without root privelages try:
 HELP
 ------------
 
-Detailed documentation is embedded in each module in the form of pod (plain old documentation). It can be viewed by using the perldoc program
+Detailed documentation is embedded in each module and script in the form of pod (plain old documentation). It can be viewed by using the perldoc program
 
     perldoc JFR::Fasta
     perldoc JFR::Fastq
     perldoc JFR::FormatSeq
     perldoc JFR::GFF3
     perldoc JFR::Translate
+    perldoc fasta2phy.pl
 
 SYNOPSIS
 ------------
