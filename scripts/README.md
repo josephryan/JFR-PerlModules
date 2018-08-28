@@ -4,6 +4,19 @@
 
     uses JFR::Fasta to convert FASTA files to PHYLIP format
 
+#### get_seq_from_fasta.pl
+
+    uses JFR::Fasta to extract FASTA sequences with a pattern in defline
+
+#### fasta2phylomatrix  
+
+    uses JFR::fasta to concatenate multiple sequence alignments into a single
+    "concatenated" matrix
+
+#### replace_deflines.pl
+
+    convert deflines to enumerated names
+
 #### INSTALL
 
     from the parent directory run 
