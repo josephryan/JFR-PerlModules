@@ -6,9 +6,9 @@ use IO::Uncompress::Gunzip qw($GunzipError);
 use IO::Uncompress::Bunzip2 qw($Bunzip2Error);
 use IO::Uncompress::Unzip qw($UnzipError);
 
-# original code by Ken Trout and named NHGRI::FastaParser
+# based off code by Ken Trout named NHGRI::FastaParser
 $JFR::Fasta::AUTHOR  = 'Joseph Ryan';
-$JFR::Fasta::VERSION = '1.05';
+$JFR::Fasta::VERSION = '1.3'; # match Git release version
 
 sub get_def_w_o_gt {
     my $self = shift;
