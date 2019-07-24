@@ -4,3 +4,8 @@ MANIFEST
 README
 t/JFR-Fasta.t
 lib/JFR/Fasta.pm
+scripts/README.md
+scripts/fasta2phy.pl
+scripts/fasta2phylomatrix
+scripts/get_seq_from_fasta.pl
+scripts/replace_deflines.pl
