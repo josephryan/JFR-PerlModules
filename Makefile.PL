@@ -4,7 +4,10 @@ use ExtUtils::MakeMaker;
 WriteMakefile(
     NAME              => 'JFR::Fasta',
     VERSION_FROM      => 'lib/JFR/Fasta.pm', # finds $VERSION
-    EXE_FILES         => ['scripts/fasta2phy.pl'],
+    EXE_FILES         => ['scripts/fasta2phy.pl',
+                          'scripts/fasta2phylomatrix',
+                          'scripts/get_seq_from_fasta.pl',
+                          'scripts/replace_deflines.pl'],
     PREREQ_PM         => {}, # e.g., Module::Name => 1.1
     ($] >= 5.005 ?     ## Add these new keywords supported since 5.005
       (ABSTRACT_FROM  => 'lib/JFR/Fasta.pm', # retrieve abstract from module
