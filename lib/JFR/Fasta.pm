@@ -8,7 +8,7 @@ use IO::Uncompress::Unzip qw($UnzipError);
 
 # original code by Ken Trout and named NHGRI::FastaParser
 $JFR::Fasta::AUTHOR  = 'Joseph Ryan';
-$JFR::Fasta::VERSION = '1.04';
+$JFR::Fasta::VERSION = '1.05';
 
 sub get_def_w_o_gt {
     my $self = shift;
