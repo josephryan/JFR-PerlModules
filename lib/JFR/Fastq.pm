@@ -4,12 +4,13 @@ package JFR::Fastq;
 
 use strict;
 use FileHandle;
+use Carp;
 use IO::Uncompress::Gunzip qw($GunzipError);
 use IO::Uncompress::Bunzip2 qw($Bunzip2Error);
 use IO::Uncompress::Unzip qw($UnzipError);
 
 $JFR::Fastq::AUTHOR  = 'Joseph Ryan';
-$JFR::Fastq::VERSION = '0.05';
+$JFR::Fastq::VERSION = '0.06';
 
 sub get_record{
     my $self = shift;
@@ -70,16 +71,16 @@ sub new {
 
     if ($file =~ m/\.gz$/i) {
         $fh = IO::Uncompress::Gunzip->new($file)
-            or die "IO::Uncompress::Gunzip of $file failed: $GunzipError\n";
+            or croak "IO::Uncompress::Gunzip of $file failed: $GunzipError\n";
     } elsif ($file =~ m/\.bz2$/i) {
         $fh = IO::Uncompress::Bunzip2->new($file)
-            or die "IO::Uncompress::Bunzip2 of $file failed: $Bunzip2Error\n";
+            or croak "IO::Uncompress::Bunzip2 of $file failed: $Bunzip2Error\n";
     } elsif ($file =~ m/\.zip$/i) {
         $fh = IO::Uncompress::Unzip->new($file)
-            or die "IO::Uncompress::Unzip of $file failed: $UnzipError\n";
+            or croak "IO::Uncompress::Unzip of $file failed: $UnzipError\n";
     } else {
         $fh = FileHandle->new($file,'r');
-        die "cannot open $file: $!\n" unless(defined $fh);
+        croak "cannot open $file: $!\n" unless(defined $fh);
     }
     my $class = ref($invocant) || $invocant;
     my $self = { 'filehandle'  => \$fh, 'stored_pos' => 0, 'stored_def' => '' };

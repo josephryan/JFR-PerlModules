@@ -2,13 +2,14 @@ package JFR::Fasta;
 
 use strict;
 use FileHandle;
+use Carp;
 use IO::Uncompress::Gunzip qw($GunzipError);
 use IO::Uncompress::Bunzip2 qw($Bunzip2Error);
 use IO::Uncompress::Unzip qw($UnzipError);
 
 # based off code by Ken Trout named NHGRI::FastaParser
 $JFR::Fasta::AUTHOR  = 'Joseph Ryan';
-$JFR::Fasta::VERSION = '1.3'; # match Git release version
+$JFR::Fasta::VERSION = '1.4'; # match Git release version
 
 sub get_def_w_o_gt {
     my $self = shift;
@@ -56,16 +57,16 @@ sub new {
 
     if ($file =~ m/\.gz$/i) {
         $fh = IO::Uncompress::Gunzip->new($file)
-            or die "IO::Uncompress::Gunzip of $file failed: $GunzipError\n";
+            or croak "IO::Uncompress::Gunzip of $file failed: $GunzipError\n";
     } elsif ($file =~ m/\.bz2$/i) {
         $fh = IO::Uncompress::Bunzip2->new($file)
-            or die "IO::Uncompress::Bunzip2 of $file failed: $Bunzip2Error\n";
+            or croak "IO::Uncompress::Bunzip2 of $file failed: $Bunzip2Error\n";
     } elsif ($file =~ m/\.zip$/i) {
         $fh = IO::Uncompress::Unzip->new($file)
-            or die "IO::Uncompress::Unzip of $file failed: $UnzipError\n";
+            or croak "IO::Uncompress::Unzip of $file failed: $UnzipError\n";
     } else {
         $fh = FileHandle->new($file,'r');
-        die "cannot open $file: $!\n" unless(defined $fh);
+        croak "cannot open $file: $!\n" unless(defined $fh);
     }
     my $class = ref($invocant) || $invocant;
     my $self = { 'filehandle'  => \$fh, 'stored_def' => '' };

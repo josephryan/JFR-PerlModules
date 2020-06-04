@@ -2,10 +2,11 @@ package JFR::GFF3;
 
 use strict;
 use FileHandle;
+use Carp;
 
 # borrowed code from NHGRI::FastaParser & Bio::Tools::GFF;
 $JFR::GFF3::AUTHOR  = 'Joseph Ryan'; 
-$JFR::GFF3::VERSION = '0.01';
+$JFR::GFF3::VERSION = '0.02';
 
 sub get_record {
     my $self = shift;
@@ -22,7 +23,7 @@ sub get_record {
         next if ($line =~ m/^\s*$/);
 	chomp $line;
         my @fields = split /\t/, $line;
-        die "not in gff format" unless (scalar(@fields) == 9);
+        croak "not in gff format" unless (scalar(@fields) == 9);
         my $rh_att = _parse_attributes($fields[8]);
         return {'seqid' =>  $fields[0],
                 'source' =>  $fields[1],
@@ -75,7 +76,7 @@ sub new {
     my $invocant = shift;
     my $file     = shift;
     my $fh       = FileHandle->new($file, 'r');
-    die "cannot open $file:$!" unless (defined $fh);
+    croak "cannot open $file:$!" unless (defined $fh);
     my $class = ref($invocant) || $invocant;
     my $self = { 'filehandle'  => \$fh, };
     return bless $self, $class;
