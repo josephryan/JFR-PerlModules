@@ -40,6 +40,8 @@ To install without root privelages try:
    # to use these modules on non-root installations add to top of script(s):
    # use lib qw(/home/myuser/scripts/perl5); 
    # this should be the directory that contains the JFR directory after 'make install'
+   # Assuming you ran "perl Makefile.PL PREFIX=/home/myuser/scripts" the following command would give you the "use lib" syntax:
+   # find /home/myuser/scripts | grep JFR | perl -ne 'chomp; print "use lib qw($_);\n" if (/\/JFR$/);'
 
 HELP
 ------------
