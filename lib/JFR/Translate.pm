@@ -65,14 +65,18 @@ JFR::Translate - Perl extension for Translating DNA and RNA sequences
   my $seq = 'ACGTUCAACGTU';   # you can use either T or U or both
 
   foreach my $frame (1, 2, 3, -1, -2, -3) {
-      my $tr_seq = JFR::Translate::translate($seq);
+      my $tr_seq = JFR::Translate::translate($seq,$frame);
   }
+
+  my $seq2 = 'ACGTTCAACGTT';
+  my $translated = JFR::Translate::revcomp($seq2);
+  $translated =~ tr/Uu/Tt/;  # by default revcomp pairs A's with U's. 
 
 =head1 DESCRIPTION
 
 Simple module to translate DNA and RNA sequences.  It automatically does
 a revcomp for translate of negative frames.
-
+          
 =head1 AUTHOR
 
 Joseph Ryan <josephryan@yahoo.com>
